@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro de Usuario</title>
+</head>
+<body>
+  <h1>Formulario de Registro</h1>
+  <form id="regForm">
+    <label>
+      Nombre:<br />
+      <input type="text" name="name" required />
+    </label><br /><br />
+    <label>
+      Email:<br />
+      <input type="email" name="email" required />
+    </label><br /><br />
+    <button type="submit">Registrarse</button>
+  </form>
+
+  <p id="msg"></p>
+
+  <script>
+    const form = document.getElementById('regForm');
+    const msg = document.getElementById('msg');
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const payload = {
+        name: data.get('name'),
+        email: data.get('email')
+      };
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      msg.textContent = json.message;
+    });
+  </script>
+</body>
+</html>
